@@ -2,18 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Backgrounds */
-  --color-bg: rgb(0, 0, 0);
-  --color-surface1: rgb(31, 31, 31);
-  --color-surface2: rgb(43, 43, 43);
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Kedebideri:wght@400;500;600;700;800;900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
-  /* Text Colors */
-  --color-text-light: rgb(249, 249, 249);
-  --color-text-dark: rgb(21, 21, 21);
-  --color-text-gray: rgb(126, 126, 126);
+/* Global font fix */
+* {
+  font-family: "Poppins", sans-serif;
+}
 
-  /* Accent Colors */
-  --color-accent1: rgb(255, 61, 0);
-  --color-accent2: rgb(254, 93, 68);
+.RC {
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.R {
+  font-family: "Roboto", sans-serif;
+}
+
+.K {
+  font-family: "Kedebideri", sans-serif;
+}
+
+.i {
+  font-family: "Inconsolata", monospace;
 }
