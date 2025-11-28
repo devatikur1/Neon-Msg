@@ -1,8 +1,18 @@
 import React from "react";
 import PhoneForm from "./AuthMainPart/PhoneForm";
+import OtpForm from "./AuthMainPart/OtpForm";
 
 export default function AuthMain({ prop }) {
-  const { size, phone, otp, error, fn } = prop;
+  const {
+    size,
+    phone,
+    otp,
+    error,
+    isOtpSent,
+    countryCode,
+    setCountryCode,
+    fn,
+  } = prop;
   return (
     <section
       style={{ height: `${size.height - 80}px`, width: `${size.width}px` }}
@@ -15,13 +25,23 @@ export default function AuthMain({ prop }) {
         </h2>
 
         {/* Login Form */}
-
-        <PhoneForm
-          phone={phone}
-          error={error}
-          handleSendOtp={fn.handleSendOtp}
-          isOtpSenting={otp.isOtpSenting}
-        />
+        {isOtpSent ? (
+          <OtpForm
+            otp={otp}
+            error={error}
+            verifyOTP={fn.verifyOTP}
+            handleSendOtp={fn.handleSendOtp}
+          />
+        ) : (
+          <PhoneForm
+            phone={phone}
+            error={error}
+            handleSendOtp={fn.handleSendOtp}
+            isOtpSenting={phone.isOtpSenting}
+            countryCode={countryCode}
+            setCountryCode={setCountryCode}
+          />
+        )}
       </div>
     </section>
   );

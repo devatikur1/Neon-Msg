@@ -1,30 +1,31 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
+import clsx from "clsx";
 
-export default function OtpForm({
-  isVerifying,
-  handleVerifyOtp,
-  handleResendOtp,
-  otp,
-  setOtp,
-  error,
-}) {
+export default function OtpForm({ otp, error, verifyOTP, handleSendOtp }) {
   return (
-    <form onSubmit={handleVerifyOtp} className="flex flex-col gap-6">
+    <form onSubmit={verifyOTP} className="flex flex-col gap-6">
       <div className="flex flex-col">
         <label className="mb-2 text-gray-700 dark:text-gray-300">
           Enter OTP
         </label>
+
         <input
           type="text"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
+          value={otp.otp}
+          onChange={(e) => otp.setOtp(e.target.value)}
           placeholder="123456"
           maxLength="6"
-          className="px-4 py-2 rounded-md border-none outline outline-dark-600/80 focus:outline-primary-glow bg-dark-600 text-white text-center text-2xl tracking-widest"
           required
+          className={clsx(
+            "px-4 py-2 rounded-md border-none ring-0 outline bg-dark-600 text-white text-center text-2xl tracking-widest transition-all",
+            otp.isVerifying && "cursor-not-allowed opacity-50",
+            error !== "" && "outline-red-500 focus:outline-red-500",
+            error === "" && "outline-dark-600/80 focus:outline-primary-glow"
+          )}
         />
-        <p className="text-xs text-gray-400 mt-1 text-center">
+
+        <p className="text-xs text-gray-400 mt-2 text-center">
           Enter the 6-digit code sent to your phone
         </p>
       </div>
@@ -35,28 +36,24 @@ export default function OtpForm({
         </div>
       )}
 
-      {isVerifying ? (
-        <button
-          type="button"
-          disabled
-          className="flex justify-center items-center gap-2 bg-primary-glow/20 text-white/50 font-medium py-2 rounded-md transition-colors select-none"
-        >
-          <Loader2 className="animate-spin" />
-          Verifying...
-        </button>
-      ) : (
-        <button
-          type="submit"
-          className="bg-primary-glow text-white font-medium py-2 rounded-md transition-colors select-none hover:bg-primary-glow/90"
-        >
-          Verify OTP
-        </button>
-      )}
+      <button
+        type={otp.isVerifying ? "button" : "submit"}
+        disabled={otp.isVerifying}
+        className={`flex justify-center items-center gap-2 font-medium py-2 rounded-md transition-all duration-300 select-none 
+          ${
+            otp.isVerifying
+              ? "bg-primary-glow/20 text-white/50"
+              : "bg-primary-glow/30 text-white hover:bg-primary-glow"
+          }`}
+      >
+        {otp.isVerifying && <Loader2 className="animate-spin" />}
+        {otp.isVerifying ? "Verifying OTP..." : "Verify OTP"}
+      </button>
 
       <button
         type="button"
-        onClick={handleResendOtp}
         className="text-primary-glow text-sm hover:underline"
+        onClick={handleSendOtp}
       >
         Didn't receive code? Resend OTP
       </button>
