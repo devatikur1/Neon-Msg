@@ -9,7 +9,7 @@ export default function GoogleForm({ error, isLoginging, handleLogin }) {
       {/* Google Login */}
       <button
         onClick={handleLogin}
-        class="w-[85%] lg:w-[75%] bg-dark-800 transition-all duration-500 hover:bg-dark-600 border border-border rounded-3xl flex justify-center items-center disabled:opacity-80"
+        className="w-[85%] lg:w-[75%] bg-dark-800 transition-all duration-500 hover:bg-dark-600 border border-border rounded-3xl flex justify-center items-center disabled:opacity-80"
       >
         {isLoginging ? (
           <div className="flex items-center gap-3 py-[0.45rem] md:py-[0.5rem]">

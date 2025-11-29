@@ -1,14 +1,14 @@
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../../auth/firebaseConfig";
 
-export async function SetAuthData({ documentID, data }) {
+export async function SetDataUseingDoc({ coll = "userData", documentID, data }) {
   try {
     if (!documentID || !data) {
       console.error("⚠️ Missing parameters in SetDataOnAuthId");
       return false;
     }
 
-    const docRef = doc(firestore, "userData", documentID);
+    const docRef = doc(firestore, coll, documentID);
 
     await setDoc(docRef, data);
 

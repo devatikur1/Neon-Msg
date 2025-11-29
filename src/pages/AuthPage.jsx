@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "@react-hook/window-size";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../contexts/auth/firebaseConfig";
-import { SetAuthData } from "../contexts/app/functions/GetDataUseingDoc";
+import { SetDataUseingDoc } from "../contexts/app/functions/SetDataUseingDoc";
 import { FirebaseContext } from "../contexts/app/FirebaseProvider";
 
 export default function AuthPage() {
@@ -54,24 +54,32 @@ export default function AuthPage() {
       };
 
       // 🔹 set data in firestore
-      const isSetData = await SetAuthData({
+      const isSetUserData = await SetDataUseingDoc({
         documentID: user.uid,
         data: userData,
       });
 
+      const isSetUserName = await SetDataUseingDoc({
+        coll: "userNames",
+        documentID: userData.username,
+        data: {
+          id: user.uid,
+        },
+      });
+
       // 🔹 set data in local storage
-      if (isSetData.status) {
+      if (isSetUserData.status && isSetUserName.status) {
         localStorage.setItem("isLogged", JSON.stringify(true));
-        localStorage.setItem("user", JSON.stringify(isSetData.data));
+        localStorage.setItem("user", JSON.stringify(isSetUserData.data));
         setIsLogged(true);
-        setUser(isSetData.data);
+        setUser(isSetUserData.data);
         setError("");
       } else {
         localStorage.setItem("isLogged", JSON.stringify(false));
         localStorage.setItem("user", JSON.stringify({}));
         setIsLogged(false);
         setUser({});
-        setError(isSetData.error);
+        setError(isSetUserData.error || isSetUserName.error);
       }
     } catch (error) {
       console.error("Google login error:", error);
