@@ -12,7 +12,6 @@ import { FirebaseContext } from "../contexts/app/FirebaseProvider";
 export default function AuthPage() {
   // 🔹 Firebase Auth Data & Context
   const { authData } = useContext(FirebaseContext);
-  console.log(authData);
 
   const { isLogged, setIsLogged, setUser } = authData;
 
