@@ -14,9 +14,9 @@ export default function LogOutMain() {
         <section className="flex items-center mt-5">
           <Link
             className="text-[1rem] R font-[600] border border-border bg-white/90 text-dark-700 px-5 py-1.5 rounded-xl"
-            to="/login"
+            to="/SignIn"
           >
-            Login
+            Sign in
           </Link>
         </section>
       </section>

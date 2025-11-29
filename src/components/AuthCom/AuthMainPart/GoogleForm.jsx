@@ -5,7 +5,7 @@ import { div } from "framer-motion/client";
 
 export default function GoogleForm({ error, isLoginging, handleLogin }) {
   return (
-    <section className="w-full flex mt-8 justify-center items-center">
+    <section className="w-full flex flex-col gap-8 mt-8 justify-center items-center">
       {/* Google Login */}
       <button
         onClick={handleLogin}
@@ -20,7 +20,7 @@ export default function GoogleForm({ error, isLoginging, handleLogin }) {
             <span>
               <GoogleIcon size={20} />
             </span>
-            <span className="text-[#fff]">Login with Google</span>
+            <span className="text-[#fff]">Sign in with Google</span>
           </div>
         )}
       </button>

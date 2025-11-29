@@ -16,7 +16,7 @@ export default function App() {
     createRoutesFromElements(
       <Route path="/" element={<AppLayout />}>
         <Route index element={<LogOutHomePage />} />
-        <Route path="login" element={<AuthPage />} />
+        <Route path="SignIn" element={<AuthPage />} />
       </Route>
     )
   );

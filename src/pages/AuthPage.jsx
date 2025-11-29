@@ -6,6 +6,12 @@ import { useWindowSize } from "@react-hook/window-size";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../contexts/auth/firebaseConfig";
 
+function genUsername(name = "") {
+  const num = Math.floor(Math.random() * 1000);
+  const str = Math.random().toString(36).substring(2, 7); // 5-letter random string
+  return name ? name.replace(/\s+/g, "").toLowerCase() + str + num : str + num;
+}
+
 export default function AuthPage() {
   // 🔹 Get Window Height
   const [width, height] = useWindowSize();
@@ -29,7 +35,15 @@ export default function AuthPage() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log("Logged in user:", user);
+      
+      let userData = {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        username: genUsername(user.displayName),
+      };
+      console.log(userData);
+      
       navigate("/");
     } catch (error) {
       console.error("Google login error:", error);

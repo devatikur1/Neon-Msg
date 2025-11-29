@@ -10,9 +10,9 @@ export default function LogOutHeader() {
       <section className="flex items-center">
         <Link
           className="text-[1rem] k font-medium border-border border bg-dark-700/80 hover:bg-dark-600/80 transition-all duration-300 px-5 py-1.5 rounded-xl"
-          to="/login"
+          to="/SignIn"
         >
-          Login
+          Sign in
         </Link>
       </section>
     </header>
