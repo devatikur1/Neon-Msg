@@ -1,18 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import GenUsername from "../contexts/app/functions/GenUsername";
 import AuthHeader from "../components/AuthCom/AuthHeader";
 import AuthMain from "../components/AuthCom/AuthMain";
 import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "@react-hook/window-size";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../contexts/auth/firebaseConfig";
-
-function genUsername(name = "") {
-  const num = Math.floor(Math.random() * 1000);
-  const str = Math.random().toString(36).substring(2, 7); // 5-letter random string
-  return name ? name.replace(/\s+/g, "").toLowerCase() + str + num : str + num;
-}
+import { SetAuthData } from "../contexts/app/functions/GetDataUseingDoc";
+import { FirebaseContext } from "../contexts/app/FirebaseProvider";
 
 export default function AuthPage() {
+  // 🔹 Firebase Auth Data & Context
+  const { authData } = useContext(FirebaseContext);
+  console.log(authData);
+
+  const { isLogged, setIsLogged, setUser } = authData;
+
   // 🔹 Get Window Height
   const [width, height] = useWindowSize();
 
@@ -26,6 +29,13 @@ export default function AuthPage() {
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
 
+  // 🔹 useEffect
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/");
+    }
+  }, [isLogged, navigate]);
+
   /* ✅ Google Login */
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,18 +45,41 @@ export default function AuthPage() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      
-      let userData = {
+
+      // 🔹 user data
+      const userData = {
         name: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
-        username: genUsername(user.displayName),
+        username: GenUsername(user.displayName),
       };
-      console.log(userData);
-      
-      navigate("/");
+
+      // 🔹 set data in firestore
+      const isSetData = await SetAuthData({
+        documentID: user.uid,
+        data: userData,
+      });
+
+      // 🔹 set data in local storage
+      if (isSetData.status) {
+        localStorage.setItem("isLogged", JSON.stringify(true));
+        localStorage.setItem("user", JSON.stringify(isSetData.data));
+        setIsLogged(true);
+        setUser(isSetData.data);
+        setError("");
+      } else {
+        localStorage.setItem("isLogged", JSON.stringify(false));
+        localStorage.setItem("user", JSON.stringify({}));
+        setIsLogged(false);
+        setUser({});
+        setError(isSetData.error);
+      }
     } catch (error) {
       console.error("Google login error:", error);
+      localStorage.setItem("isLogged", JSON.stringify(false));
+      localStorage.setItem("user", JSON.stringify({}));
+      setIsLogged(false);
+      setUser({});
       setError(error.message);
     } finally {
       setIsLoginging(false);
